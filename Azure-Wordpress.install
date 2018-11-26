@@ -1,0 +1,21 @@
+#!/bin/bash
+set -ex
+  
+sudo apt-get -y update
+export DEBIAN_FRONTEND=noninteractive
+echo mysql-server-5.6 mysql-server/root_password password @@{mysql_pass}@@ | sudo debconf-set-selections
+echo mysql-server-5.6 mysql-server/root_password_again password @@{mysql_pass}@@ | sudo debconf-set-selections
+  
+# Install the LAMP stack and WordPress
+sudo apt-get -y install apache2 mysql-server php5 php5-mysql wordpress
+  
+# Setup WordPress
+sudo gzip -d /usr/share/doc/wordpress/examples/setup-mysql.gz
+sudo bash /usr/share/doc/wordpress/examples/setup-mysql -n wordpress localhost
+  
+sudo ln -s /usr/share/wordpress /var/www/html/wordpress
+sudo mv /etc/wordpress/config-localhost.php /etc/wordpress/config-default.php
+echo "ServerName $(hostname)" | sudo tee -a /etc/apache2/apache2.conf
+  
+# Restart Apache
+sudo apachectl restart
