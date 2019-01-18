@@ -1,0 +1,44 @@
+#!/bin/bash
+set -ex
+
+### Mysql installation
+# Download MySQL & install wget
+sudo yum install -y wget
+wget https://dev.mysql.com/get/mysql80-community-release-el7-1.noarch.rpm
+
+# Update
+#sudo yum update -y
+
+# Install MySQL
+sudo rpm -ivh mysql80-community-release-el7-1.noarch.rpm
+sudo yum install -y mysql-server
+sudo systemctl start mysqld
+
+# Start MySQL daemon & enable it
+sudo systemctl start mysqld
+sudo systemctl enable mysqld
+
+# Create DB folder
+sudo mkdir -p /var/uptick/database/mysql/
+cd /var/uptick/database/mysql/
+
+### Upload existing database
+# Install wget via yum
+sudo yum -y install wget
+
+# Download uptick database
+sudo wget https://raw.githubusercontent.com/OptimalZ06/uptick/master/databases/mysql/uptick.database.sql
+
+# Mysql secure installation
+# Mysql secure installation
+mysql -u root<<-EOF
+UPDATE mysql.user SET Password=PASSWORD('@@{MYSQL_PASSWORD}@@') WHERE User='root';
+create database Uptick;
+GRANT ALL ON Uptick.* TO '@@{MYSQL_USERNAME}@@'@'%' IDENTIFIED BY '@@{MYSQL_PASSWORD}@@';
+use Uptick;
+source /var/uptick/database/mysql/uptick.database.sql;
+FLUSH PRIVILEGES;
+EOF
+
+# Restart MySQL service
+sudo systemctl restart mysqld
