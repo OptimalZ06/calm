@@ -7,7 +7,7 @@ sudo yum install -y wget
 wget https://dev.mysql.com/get/mysql80-community-release-el7-1.noarch.rpm
 
 # Update
-#sudo yum update -y
+sudo yum update -y
 
 # Install MySQL
 sudo rpm -ivh mysql80-community-release-el7-1.noarch.rpm
