@@ -1,17 +1,18 @@
 #!/bin/bash
 set -ex
 
-# Update
-sudo yum update -y
-
 ### Mysql installation
-# Install wget
+# Download MySQL & install wget
 sudo yum install -y wget
+wget https://dev.mysql.com/get/mysql80-community-release-el7-1.noarch.rpm
+
+# Update
+#sudo yum update -y
 
 # Install MySQL
-wget https://dev.mysql.com/get/mysql80-community-release-el7-1.noarch.rpm
 sudo rpm -ivh mysql80-community-release-el7-1.noarch.rpm
 sudo yum install -y mysql-server
+sudo systemctl start mysqld
 
 # Start MySQL daemon & enable it
 sudo systemctl start mysqld
@@ -32,6 +33,8 @@ sudo wget https://raw.githubusercontent.com/OptimalZ06/uptick/master/databases/m
 password=$(grep -oP 'temporary password(.*): \K(\S+)' /var/log/mysqld.log | awk '{print $NF}')
 mysqladmin -u root --password="$password" password "@@{MYSQL_PASSWORD}@@"
 mysql -u root --password="@@{MYSQL_PASSWORD}@@" -e "UNINSTALL COMPONENT 'file://component_validate_password'"
+#mysql -u root --password="@@{MYSQL_PASSWORD}@@"
+#mysqladmin -u root --password="aaBB**cc1122" password "@@{MYSQL_PASSWORD}@@"
 
 # Mysql secure installation {Calm}
 mysql -u root --password="@@{MYSQL_PASSWORD}@@"<<-EOF
