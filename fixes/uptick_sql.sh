@@ -1,18 +1,17 @@
 #!/bin/bash
 set -ex
 
-### Mysql installation
-# Download MySQL & install wget
-sudo yum install -y wget
-wget https://dev.mysql.com/get/mysql80-community-release-el7-1.noarch.rpm
-
 # Update
-#sudo yum update -y
+sudo yum update -y
+
+### Mysql installation
+# Install wget
+sudo yum install -y wget
 
 # Install MySQL
+wget https://dev.mysql.com/get/mysql80-community-release-el7-1.noarch.rpm
 sudo rpm -ivh mysql80-community-release-el7-1.noarch.rpm
 sudo yum install -y mysql-server
-sudo systemctl start mysqld
 
 # Start MySQL daemon & enable it
 sudo systemctl start mysqld
