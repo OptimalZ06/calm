@@ -32,8 +32,6 @@ sudo wget https://raw.githubusercontent.com/OptimalZ06/uptick/master/databases/m
 password=$(grep -oP 'temporary password(.*): \K(\S+)' /var/log/mysqld.log | awk '{print $NF}')
 mysqladmin -u root --password="$password" password "@@{MYSQL_PASSWORD}@@"
 mysql -u root --password="@@{MYSQL_PASSWORD}@@" -e "UNINSTALL COMPONENT 'file://component_validate_password'"
-#mysql -u root --password="@@{MYSQL_PASSWORD}@@"
-#mysqladmin -u root --password="aaBB**cc1122" password "@@{MYSQL_PASSWORD}@@"
 
 # Mysql secure installation {Calm}
 mysql -u root --password="@@{MYSQL_PASSWORD}@@"<<-EOF
